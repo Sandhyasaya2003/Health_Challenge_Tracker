@@ -1,0 +1,109 @@
+<div class="p-8  max-w-8xl min-h-screen mx-auto bg-gray rounded-xl shadow-lg space-y-6">
+    <!-- Input Fields -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <input
+        [(ngModel)]="newWorkout.userName"
+        placeholder="Enter Name"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+      />
+      <select
+        [(ngModel)]="newWorkout.workoutType"
+        class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+      >
+        <option value="" disabled selected>Select Workout Type</option>
+        <option value="Running">Running</option>
+        <option value="Cycling">Cycling</option>
+        <option value="Yoga">Yoga</option>
+        <option value="Swimming">Swimming</option>
+      </select>
+      <input
+        type="number"
+        [(ngModel)]="newWorkout.duration"
+        placeholder="Duration (min)"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+      />
+    </div>
+  
+    <!-- Add Workout Button -->
+    <button
+      (click)="addWorkout()"
+      class="w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold py-3 rounded-lg hover:shadow-md hover:from-blue-600 hover:to-blue-800 transition-all duration-300"
+    >
+      Add Workout
+    </button>
+  
+    <!-- Search & Filter -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <input
+        [(ngModel)]="searchQuery"
+        placeholder="🔍 Search by Name"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+      />
+      <select
+        [(ngModel)]="filterType"
+        class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+      >
+        <option value="">All Types</option>
+        <option value="Running">Running</option>
+        <option value="Cycling">Cycling</option>
+        <option value="Yoga">Yoga</option>
+        <option value="Swimming">Swimming</option>
+      </select>
+    </div>
+  
+    <!-- Workout Table -->
+    <div class="overflow-x-auto rounded-lg shadow-md border border-gray-300">
+      <table class="w-full border-collapse bg-white">
+        <thead>
+          <tr class="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 uppercase text-sm border-b-2 border-gray-400">
+            <th class="border border-gray-300 px-6 py-3 text-left">Name</th>
+            <th class="border border-gray-300 px-6 py-3 text-left">Workout Type</th>
+            <th class="border border-gray-300 px-6 py-3 text-left">Duration (min)</th>
+            <th class="border border-gray-300 px-6 py-3 text-left">Workout Count</th> <!-- New column -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let workout of filteredWorkouts()" class="hover:bg-gray-50 transition-all">
+            <td class="border border-gray-200 px-6 py-3">{{ workout.userName }}</td>
+            <td class="border border-gray-200 px-6 py-3">{{ workout.workoutType }}</td>
+            <td class="border border-gray-200 px-6 py-3">{{ workout.duration }} min</td>
+            <td class="border border-gray-200 px-6 py-3">
+              {{ getWorkoutCountForUser(workout.userName) }}
+            </td> <!-- Display workout count for each user -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Pagination Controls -->
+    <div class="flex justify-between items-center mt-4">
+      <button
+        (click)="prevPage()"
+        [disabled]="currentPage === 1"
+        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 disabled:bg-gray-200"
+      >
+        << Previous
+      </button>
+  
+      <span class="text-gray-700">Page {{ currentPage }} of {{ totalPages }}</span>
+  
+      <button
+        (click)="nextPage()"
+        [disabled]="currentPage === totalPages"
+        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 disabled:bg-gray-200"
+      >
+        Next >>
+      </button>
+  
+      <!-- Items per Page Dropdown -->
+      <select (change)="changeItemsPerPage($event)" class="p-2 border border-gray-400 rounded-lg">
+        <option value="5">Items per page: 5</option>
+        <option value="10">Items per page: 10</option>
+        <option value="20">Items per page: 20</option>
+        <option value="30">Items per page: 30</option>
+        <option value="40">Items per page: 40</option>
+        <option value="50">Items per page: 50</option>
+      </select>
+    </div>
+  </div>
+  
